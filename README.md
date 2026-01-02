@@ -1,25 +1,98 @@
-###############################################################################
-# Copyright (C) 2006-2025 Jonathan Michaelson
-#
-# https://github.com/waytotheweb/scripts
-#
-# This program is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
-#
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-# details.
-#
-# You should have received a copy of the GNU General Public License along with
-# this program; if not, see <https://www.gnu.org/licenses>.
-###############################################################################
+
+# Installation
+
+Installation is quite straightforward:
+
+    cd /usr/local/src
+    rm -fv csf.zip
+    wget https://github.com/serverok/csf-firewall/archive/refs/heads/main.zip -O csf.zip
+    unzip csf.zip
+    cd csf-firewall-main
+    sh install.sh
+
+Next, test whether you have the required iptables modules:
+
+    perl /usr/local/csf/bin/csftest.pl
+
+Don't worry if you cannot run all the features, so long as the script doesn't
+report any FATAL errors
+
+You should not run any other iptables firewall configuration script. For
+example, if you previously used APF+BFD you can remove the combination (which
+you will need to do if you have them installed otherwise they will conflict):
+
+    sh /usr/local/csf/bin/remove_apf_bfd.sh
+
+That's it. You can then configure csf and lfd by reading the documentation and
+configuration files in /etc/csf/csf.conf and /etc/csf/readme.txt directly or
+through the csf User Interface.
+
+csf installation for cPanel and DirectAdmin is preconfigured to work on those
+servers with all the standard ports open.
+
+csf auto-configures your SSH port on installation where it's running on a non-
+standard port.
+
+csf auto-whitelists your connected IP address where possible on installation.
+
+You should ensure that kernel logging daemon (klogd) is enabled. Typically, VPS
+servers running RedHat/CentOS v5 have this disabled and you should check
+/etc/init.d/syslog and make sure that any klogd lines are not commented out. If
+you change the file, remember to restart syslog.
+
+See the csf.conf and readme.txt files for more information.
+
+## Perl Modules
+
+While most should be installed on a standard perl installation the following
+may need to be installed manually:
+
+### On rpm based systems:
+
+```
+
+    yum install perl-libwww-perl.noarch perl-LWP-Protocol-https.noarch perl-GDGraph perl-Math-BigInt.noarch
+
+```
+
+### On APT based systems:
+
+    apt-get install libwww-perl liblwp-protocol-https-perl libgd-graph-perl
+
+# Via cpan:
+
+    perl -MCPAN -eshell
+    cpan> install LWP LWP::Protocol::https GD::Graph
 
 
-ConfigServer Security & Firewall
-################################
+
+InterWorx
+=========
+
+1. Enable csf in InterWorx > NodeWorx > Plugins > csf
+
+2. See the InterWorx section in /etc/csf/readme.txt
+
+## Webmin Module Installation/Upgrade
+
+To install or upgrade the csf webmin module:
+
+Install csf as above
+Install the csf webmin module in:
+
+Webmin > Webmin Configuration > Webmin Modules >
+From local file > /usr/local/csf/csfwebmin.tgz > Install Module
+
+
+## Uninstallation
+
+Removing csf and lfd is even more simple:
+
+    cd /etc/csf
+    sh uninstall.sh
+
+
+# ConfigServer Security & Firewall
 
 This suite of scripts provides:
 
@@ -99,8 +172,7 @@ This document contains:
 ###############
 
 
-ConfigServer Firewall (csf)
-===========================
+## ConfigServer Firewall (csf)
 
 We have developed an SPI iptables firewall that is straight-forward, easy and
 flexible to configure and secure with extra checks to ensure smooth operation.
@@ -112,15 +184,14 @@ UI's for cPanel, DirectAdmin and Webmin
 
 Directory structure:
 
-/etc/csf/           - configuration files 
-/var/lib/csf/       - temporary data files
-/usr/local/csf/bin/ - scripts
-/usr/local/csf/lib/ - perl modules and static data
-/usr/local/csf/tpl/ - email alert templates
+    /etc/csf/           - configuration files 
+    /var/lib/csf/       - temporary data files
+    /usr/local/csf/bin/ - scripts
+    /usr/local/csf/lib/ - perl modules and static data
+    /usr/local/csf/tpl/ - email alert templates
 
 
-Login Failure Daemon (lfd)
-==========================
+## Login Failure Daemon (lfd)
 
 To complement the ConfigServer Firewall, we have developed a daemon process
 that runs all the time and periodically (every X seconds) scans the latest log
@@ -139,8 +210,8 @@ compromises.
 On cPanel servers, lfd is integrated into the WHM > Service Manager, which will
 restart lfd if it fails for any reason.
 
-Control Panel Interface
-=======================
+### Control Panel Interface
+
 
 To help with the ease and flexibility of the suite we have developed a
 front-end to both csf and lfd for cPanel, DirectAdmin and Webmin. From there
@@ -150,9 +221,7 @@ firewall very simple indeed.
 
 There is, of course, a comprehensive Command Line Interface (CLI) for csf.
 
-
-2. csf Principles
-#################
+## 2. csf Principles
 
 The idea with csf, as with most iptables firewall configurations, is to block 
 everything and then allow through only those connections that you want. This is
@@ -190,9 +259,7 @@ have this disabled and you should check /etc/init.d/syslog and make sure that
 any klogd lines are not commented out. If you change the file, remember to
 restart syslog.
 
-
-3. lfd Principles
-#################
+## 3. lfd Principles
 
 One of the best ways to protect the server from inbound attack against network 
 daemons is to monitor their authentication logs. Invalid login attempts which 
@@ -224,8 +291,8 @@ alert (which is on by default) and you should watch the log file in
 /var/log/lfd.log.
 
 
-4. csf Command Line Options
-###########################
+## 4. csf Command Line Options
+
 
 Before configuring and starting csf for the first time, it is a good idea to
 run the script /etc/csf/csftest.pl using:
@@ -239,26 +306,23 @@ script doesn't report any FATAL errors.
 
 You can view the csf command line options by using either:
 
-# man csf
-
-or 
-
-# csf -h
+    man csf
+    csf -h
 
 These options allow you to easily and quickly control and view csf. All the 
 configuration files for csf are in /etc/csf and include:
 
-csf.conf	- the main configuration file, it has helpful comments explaining
-		  what each option does
-csf.allow	- a list of IP's and CIDR addresses that should always be allowed 
-		  through the firewall
-csf.deny	- a list of IP's and CIDR addresses that should never be allowed
-		  through the firewall
-csf.ignore	- a list of IP's and CIDR addresses that lfd should ignore and
-		  not block if detected
-csf.*ignore	- various ignore files that list files, users, IP's that lfd
-		  should ignore. See each file for their specific purpose and
-		 tax
+    csf.conf	- the main configuration file, it has helpful comments explaining
+    		  what each option does
+    csf.allow	- a list of IP's and CIDR addresses that should always be allowed 
+    		  through the firewall
+    csf.deny	- a list of IP's and CIDR addresses that should never be allowed
+    		  through the firewall
+    csf.ignore	- a list of IP's and CIDR addresses that lfd should ignore and
+    		  not block if detected
+    csf.*ignore	- various ignore files that list files, users, IP's that lfd
+    		  should ignore. See each file for their specific purpose and
+    		 tax
 
 If you modify any of the files listed above, you will need to restart csf and
 then lfd to have them take effect. If you use the command line options to add
@@ -272,12 +336,12 @@ If editing the csf.allow or csf.deny files directly, either from shell or the
 WHM UI, you should put a <space>#<space> between the IP address and the comment
 like this:
 
-11.22.33.44 # Added because I don't like them
+    11.22.33.44 # Added because I don't like them
 
 You can also include comments when using the csf -a or csf -d commands, but in
 those cases you must not use a # like this:
 
-csf -d 11.22.33.44 Added because I don't like them
+    csf -d 11.22.33.44 Added because I don't like them
 
 If you use the shell commands then each comment line will be timestamped. You
 will also find that if lfd blocks an IP address it will add a descriptive
@@ -287,41 +351,40 @@ If you don't want csf to rotate a particular IP in csf.deny if the line limit
 is reach you can do so by adding "do not delete" within the comment field,
 e.g.:
 
-11.22.33.44 # Added because I don't like them. do not delete
+    11.22.33.44 # Added because I don't like them. do not delete
 
-Include statement in configuration files
-========================================
+## Include statement in configuration files
 
 You can use an Include statement in the following files that conform to the
 format of the originating file:
 
-/etc/csf/csf.allow
-/etc/csf/csf.blocklists
-/etc/csf/csf.cloudflare
-/etc/csf/csf.deny
-/etc/csf/csf.dirwatch
-/etc/csf/csf.dyndns
-/etc/csf/csf.fignore
-/etc/csf/csf.ignore
-/etc/csf/csf.logfiles
-/etc/csf/csf.logignore
-/etc/csf/csf.mignore
-/etc/csf/csf.pignore
-/etc/csf/csf.rblconf
-/etc/csf/csf.redirect
-/etc/csf/csf.rignore
-/etc/csf/csf.signore
-/etc/csf/csf.sips
-/etc/csf/csf.smtpauth
-/etc/csf/csf.suignore
-/etc/csf/csf.syslogs
-/etc/csf/csf.syslogusers
-/etc/csf/csf.uidignore
+    /etc/csf/csf.allow
+    /etc/csf/csf.blocklists
+    /etc/csf/csf.cloudflare
+    /etc/csf/csf.deny
+    /etc/csf/csf.dirwatch
+    /etc/csf/csf.dyndns
+    /etc/csf/csf.fignore
+    /etc/csf/csf.ignore
+    /etc/csf/csf.logfiles
+    /etc/csf/csf.logignore
+    /etc/csf/csf.mignore
+    /etc/csf/csf.pignore
+    /etc/csf/csf.rblconf
+    /etc/csf/csf.redirect
+    /etc/csf/csf.rignore
+    /etc/csf/csf.signore
+    /etc/csf/csf.sips
+    /etc/csf/csf.smtpauth
+    /etc/csf/csf.suignore
+    /etc/csf/csf.syslogs
+    /etc/csf/csf.syslogusers
+    /etc/csf/csf.uidignore
 
 You must specify the full path to the included file, e.g. in
 /etc/csf/csf.allow:
 
-Include /etc/csf/csf.alsoallow
+    Include /etc/csf/csf.alsoallow
 
 Do NOT put a comment after the Include filename as this will not work and will
 invalidate the Include line.
@@ -330,9 +393,7 @@ Note: None of the csf commands for adding or removing entries from the
 originating file will be performed on Include files. They are treated as
 read-only.
 
-
-5. lfd Command Line Options
-###########################
+## 5. lfd Command Line Options
 
 lfd does not have any command line options of its own but is controlled through
 init or systemd which stops and starts the daemon. It is configured using the
@@ -344,38 +405,37 @@ where its activities are logged.
 The various email alert templates follow, care should be taken if you
 modify that file to maintain the correct format:
 
-/usr/local/csf/tpl/accounttracking.txt - for account tracking alert emails
-/usr/local/csf/tpl/alert.txt - for port blocking emails
-/usr/local/csf/tpl/connectiontracking.txt - for connection tracking emails
-/usr/local/csf/tpl/consolealert.txt - for console root login alert emails
-/usr/local/csf/tpl/cpanelalert.txt - for WHM/cPanel account access emails
-/usr/local/csf/tpl/exploitalert.txt - for system exploit alert emails
-/usr/local/csf/tpl/filealert.txt - for suspicious file alert emails
-/usr/local/csf/tpl/forkbombalert.txt - for fork bomb alert emails
-/usr/local/csf/tpl/integrityalert.txt - for system integrity alert emails
-/usr/local/csf/tpl/loadalert.txt - for high load average alert emails
-/usr/local/csf/tpl/logalert.txt - for log scanner report emails
-/usr/local/csf/tpl/logfloodalert.txt - for log file flooding alert emails
-/usr/local/csf/tpl/modsecipdbcheck.txt - for ModSecurity IP DB size alert emails
-/usr/local/csf/tpl/netblock.txt - for netblock alert emails
-/usr/local/csf/tpl/permblock.txt - for temporary to permanent block alert emails
-/usr/local/csf/tpl/portknocking.txt - for Port Knocking alert emails
-/usr/local/csf/tpl/portscan.txt - for port scan tracking alert emails
-/usr/local/csf/tpl/processtracking.txt - for process tracking alert emails
-/usr/local/csf/tpl/queuealert.txt - for email queue alert emails
-/usr/local/csf/tpl/relayalert.txt - for email relay alert emails
-/usr/local/csf/tpl/resalert.txt - for process resource alert emails
-/usr/local/csf/tpl/scriptalert.txt - for script alert emails
-/usr/local/csf/tpl/sshalert.txt - for SSH login emails
-/usr/local/csf/tpl/sualert.txt - for SU alert emails
-/usr/local/csf/tpl/tracking.txt - for POP3/IMAP blocking emails
-/usr/local/csf/tpl/uialert.txt - for UI alert emails
-/usr/local/csf/tpl/usertracking.txt - for user process tracking alert emails
-/usr/local/csf/tpl/watchalert.txt - for watched file and directory change alert emails
-/usr/local/csf/tpl/webminalert.txt - for Webmin login emails
+    /usr/local/csf/tpl/accounttracking.txt - for account tracking alert emails
+    /usr/local/csf/tpl/alert.txt - for port blocking emails
+    /usr/local/csf/tpl/connectiontracking.txt - for connection tracking emails
+    /usr/local/csf/tpl/consolealert.txt - for console root login alert emails
+    /usr/local/csf/tpl/cpanelalert.txt - for WHM/cPanel account access emails
+    /usr/local/csf/tpl/exploitalert.txt - for system exploit alert emails
+    /usr/local/csf/tpl/filealert.txt - for suspicious file alert emails
+    /usr/local/csf/tpl/forkbombalert.txt - for fork bomb alert emails
+    /usr/local/csf/tpl/integrityalert.txt - for system integrity alert emails
+    /usr/local/csf/tpl/loadalert.txt - for high load average alert emails
+    /usr/local/csf/tpl/logalert.txt - for log scanner report emails
+    /usr/local/csf/tpl/logfloodalert.txt - for log file flooding alert emails
+    /usr/local/csf/tpl/modsecipdbcheck.txt - for ModSecurity IP DB size alert emails
+    /usr/local/csf/tpl/netblock.txt - for netblock alert emails
+    /usr/local/csf/tpl/permblock.txt - for temporary to permanent block alert emails
+    /usr/local/csf/tpl/portknocking.txt - for Port Knocking alert emails
+    /usr/local/csf/tpl/portscan.txt - for port scan tracking alert emails
+    /usr/local/csf/tpl/processtracking.txt - for process tracking alert emails
+    /usr/local/csf/tpl/queuealert.txt - for email queue alert emails
+    /usr/local/csf/tpl/relayalert.txt - for email relay alert emails
+    /usr/local/csf/tpl/resalert.txt - for process resource alert emails
+    /usr/local/csf/tpl/scriptalert.txt - for script alert emails
+    /usr/local/csf/tpl/sshalert.txt - for SSH login emails
+    /usr/local/csf/tpl/sualert.txt - for SU alert emails
+    /usr/local/csf/tpl/tracking.txt - for POP3/IMAP blocking emails
+    /usr/local/csf/tpl/uialert.txt - for UI alert emails
+    /usr/local/csf/tpl/usertracking.txt - for user process tracking alert emails
+    /usr/local/csf/tpl/watchalert.txt - for watched file and directory change alert emails
+    /usr/local/csf/tpl/webminalert.txt - for Webmin login emails
 
-6. Login Tracking
-#################
+## 6. Login Tracking
 
 Login tracking is an extension of lfd, it keeps track of POP3 and IMAP logins
 and limits them to X connections per hour per account per IP address. It uses
@@ -398,12 +458,11 @@ matching. Please read /usr/local/csf/bin/regex.custom.pm for more information
 Important Note: To enable successful SSHD login tracking you should ensure that
 UseDNS in /etc/ssh/sshd_config is disabled by using:
 
-UseDNS no
+    UseDNS no
 
 and that sshd has then been restarted.
 
-7. Script Email Alerts
-######################
+## 7. Script Email Alerts
 
 (cPanel installations of csf only)
 
@@ -431,8 +490,7 @@ also then includes the commands needed to re-enable the offending path.
 Any false-positives can be added to /etc/csf/csf.signore and lfd will then
 ignore those listed scripts.
 
-8. Process Tracking
-###################
+## 8. Process Tracking
 
 This option enables tracking of user and nobody processes and examines them for
 suspicious executables or open network ports. Its purpose is to identify
@@ -450,9 +508,9 @@ users or files so that you don't force false-negatives.
 
 You must use the following format:
 
-exe:/full/path/to/file
-user:username
-cmd:command line
+    exe:/full/path/to/file
+    user:username
+    cmd:command line
 
 The command line as reported in /proc has the trailing null character removed
 and all other occurrences replaced with a space. So, the line you specify in
@@ -468,8 +526,8 @@ suspicious web scripts.
 For more information on the difference between executable and command line, you
 should read and understand how the linux /proc pseudo-filesystem works:
 
-man proc
-man lsof
+    man proc
+    man lsof
 
 It is beyond the scope of this application to explain how to investigate
 processes in the linux /proc architecture.
@@ -503,9 +561,7 @@ for longer before they're picked up.
 
 You can, of course, turn the feature off too - if you really want to.
 
-
-9. Directory Watching
-#####################
+## 9. Directory Watching
 
 Directory Watching enables lfd to check /tmp and /dev/shm and other pertinent
 directories for suspicious files, i.e. script exploits.
@@ -523,7 +579,7 @@ are simply removed.
 
 If you want to extract the tarball to your current location, use:
 
-tar -xpf /var/lib/csf/suspicious.tar
+    tar -xpf /var/lib/csf/suspicious.tar
 
 This will preserver the path and permissions of the original file.
 
@@ -534,8 +590,9 @@ Within csf.fignore is a list of files that lfd directory watching will ignore.
 You must specify the full path to the file
 
 You can also use perl regular expression pattern matching, for example:
-/tmp/clamav.*
-/tmp/.*\.wrk
+
+    /tmp/clamav.*
+    /tmp/.*\.wrk
 
 Remember that you will need to escape special characters (precede them with a
 backslash) such as \. \?
@@ -560,25 +617,25 @@ simple md5sum match from the output of "ls -laAR" on the entry and so will
 traverse directories if specified.
 
 
-10. Advanced Allow/Deny Filters
-###############################
+
+## 10. Advanced Allow/Deny Filters
 
 In /etc/csf/csf.allow and /etc/csf/csf.deny you can add more complex port and
 ip filters using the following format (you must specify a port AND an IP
 address):
 
-tcp/udp|in/out|s/d=port|s/d=ip|u=uid
+    tcp/udp|in/out|s/d=port|s/d=ip|u=uid
 
 Broken down:
 
-tcp/udp  : EITHER tcp OR udp OR icmp protocol
-in/out   : EITHER incoming OR outgoing connections
-s/d=port : EITHER source OR destination port number (or ICMP type)
-           (use a _ for a port range, e.g. 2000_3000)
-           (use a , for a multiport list of up to 15 ports, e.g. 22,80,443)
-s/d=ip   : EITHER source OR destination IP address
-u/g=UID  : EITHER UID or GID of source packet, implies outgoing connections,
-           s/d=IP value is ignored
+    tcp/udp  : EITHER tcp OR udp OR icmp protocol
+    in/out   : EITHER incoming OR outgoing connections
+    s/d=port : EITHER source OR destination port number (or ICMP type)
+               (use a _ for a port range, e.g. 2000_3000)
+               (use a , for a multiport list of up to 15 ports, e.g. 22,80,443)
+    s/d=ip   : EITHER source OR destination IP address
+    u/g=UID  : EITHER UID or GID of source packet, implies outgoing connections,
+               s/d=IP value is ignored
 
 Note: ICMP filtering uses the "port" for s/d=port to set the ICMP type.
 Whether you use s or d is not relevant as either simply uses the iptables
@@ -1745,3 +1802,7 @@ will be ignored while this is in place.
 If you want to use the now inbuilt detection you must edit
 /etc/csf/regex.custom.pm and remove the 3 lines that comprise the custom entry
 and then restart lfd.
+
+
+
+
