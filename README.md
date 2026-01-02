@@ -64,10 +64,7 @@ may need to be installed manually:
     perl -MCPAN -eshell
     cpan> install LWP LWP::Protocol::https GD::Graph
 
-
-
-InterWorx
-=========
+## InterWorx
 
 1. Enable csf in InterWorx > NodeWorx > Plugins > csf
 
@@ -83,14 +80,12 @@ Install the csf webmin module in:
 Webmin > Webmin Configuration > Webmin Modules >
 From local file > /usr/local/csf/csfwebmin.tgz > Install Module
 
-
 ## Uninstallation
 
 Removing csf and lfd is even more simple:
 
     cd /etc/csf
     sh uninstall.sh
-
 
 # ConfigServer Security & Firewall
 
@@ -105,7 +100,6 @@ The reason we have developed this suite is that we have found over the years of
 providing server management services that many of the tools available for the
 task are either over-complex, not very friendly, or simply aren't as effective
 as they could or should be.
-
 
 This document contains:
 
@@ -167,10 +161,7 @@ This document contains:
 
 29. CentOS Web Panel (CWP)
 
-
-1. Introduction
-###############
-
+## 1. Introduction
 
 ## ConfigServer Firewall (csf)
 
@@ -189,7 +180,6 @@ Directory structure:
     /usr/local/csf/bin/ - scripts
     /usr/local/csf/lib/ - perl modules and static data
     /usr/local/csf/tpl/ - email alert templates
-
 
 ## Login Failure Daemon (lfd)
 
@@ -211,7 +201,6 @@ On cPanel servers, lfd is integrated into the WHM > Service Manager, which will
 restart lfd if it fails for any reason.
 
 ### Control Panel Interface
-
 
 To help with the ease and flexibility of the suite we have developed a
 front-end to both csf and lfd for cPanel, DirectAdmin and Webmin. From there
@@ -290,9 +279,7 @@ If you want to know when lfd blocks an IP address you can enable the email
 alert (which is on by default) and you should watch the log file in
 /var/log/lfd.log.
 
-
 ## 4. csf Command Line Options
-
 
 Before configuring and starting csf for the first time, it is a good idea to
 run the script /etc/csf/csftest.pl using:
@@ -302,7 +289,6 @@ perl /etc/csf/csftest.pl
 This script will test whether the required iptables modules are functioning on
 the server. Don't worry if it cannot run all the features, so long as the
 script doesn't report any FATAL errors.
-
 
 You can view the csf command line options by using either:
 
@@ -604,7 +590,6 @@ You can also add entries to ignore files owner by a particular user by
 preceding it with user:, for example:
 user:bob
 
-
 Note: files owned by root are ignored
 
 For information on perl regular expressions:
@@ -615,8 +600,6 @@ option allows you to have lfd watch a particular file or directory for changes
 and should they change and email alert using watchalert.txt is sent. It uses a
 simple md5sum match from the output of "ls -laAR" on the entry and so will
 traverse directories if specified.
-
-
 
 ## 10. Advanced Allow/Deny Filters
 
@@ -669,9 +652,7 @@ tcp|in|d=22|s=www.configserver.com
 # TCP connections inbound to port 22,80,443 from IP 44.33.22.11
 d=22,80,443|s=44.33.22.11
 
-
-11. Multiple Ethernet Devices
-#############################
+## 11. Multiple Ethernet Devices
 
 If you have multiple ethernet NICs that you want to apply all rules to, then
 you can set ETH_DEVICE to the interface name immediately followed by a plus
@@ -680,9 +661,7 @@ sign. For example, eth+ will apply all iptables rules to eth0, eth1, etc.
 That said, if you leave ETH_DEVICE blank all rules will be applied to all
 ethernet devices equally.
 
-
-12. Installation on a Generic Linux Server
-##########################################
+## 12. Installation on a Generic Linux Server
 
 csf+lfd can be configured to run on a generic Linux server. There are some
 changes to the features available:
@@ -699,9 +678,7 @@ changes to the features available:
 The codebase is the same for a all installations, the csf.conf file simply has
 the cPanel specific options removed and the GENERIC option added
 
-
-13. A note about FTP Connection Issues
-######################################
+## 13. A note about FTP Connection Issues
 
 It is important when using an SPI firewall to ensure FTP client applications
 are configured to use Passive (PASV) mode connections to the server.
@@ -732,9 +709,7 @@ in both csf and your FTP server configuration (see above).
 Perversely, this makes your firewall less secure, while trying to make FTP
 connections more secure.
 
-
-14. Messenger Service
-#####################
+## 14. Messenger Service
 
 This feature allows the display of a message to a blocked connecting IP address
 to inform the user that they are blocked in the firewall. This can help when
@@ -765,9 +740,7 @@ CC_MESSENGER_ALLOW = ""
 CC_MESSENGER_DENY = ""
 See /etc/csf/csf.conf for an explanation of those options.
 
-
-Messenger User
-==============
+## Messenger User
 
 You should create a unique user that the messenger services will run under. 
 This user should be disabled and have no shell access, but should have a home
@@ -778,8 +751,7 @@ the root shell using:
 
 useradd csf -s /bin/false
 
-TEXT Messenger Server
-=====================
+## TEXT Messenger Server
 
 The TEXT message that is displayed is provided by the file:
 
@@ -801,8 +773,7 @@ The TEXT server port should not be added to the TCP_IN list.
 
 There is a maximum of 15 port allowed in MESSENGER_TEXT_IN.
 
-HTML and HTTPS Messenger v1 Server
-==================================
+## HTML and HTTPS Messenger v1 Server
 
 The HTML and HTTPS message that is displayed is provided by the file:
 
@@ -833,8 +804,7 @@ The HTML and HTTPS server ports should not be added to the TCP_IN list.
 There is a maximum of 15 ports allowed in MESSENGER_HTML_IN and
 MESSENGER_HTTPS_IN.
 
-HTML and HTTPS Messenger v2 Server
-==================================
+## HTML and HTTPS Messenger v2 Server
 
 This service is only available to cPanel servers running Apache. It utilises
 the existing Apache service to provide the message as well as RECAPTCHA
@@ -842,8 +812,7 @@ unblocking. It is enabled through the MESSENGERV2 option.
 
 The server must be running Apache v2.4 and using cPanel's EasyApache v4.
 
-HTML and HTTPS Messenger v3 Server
-==================================
+## HTML and HTTPS Messenger v3 Server
 
 This service is available to servers running Apache or Litespeed/Openlitespeed.
 It utilises the existing web server service to provide the message as well as
@@ -879,8 +848,7 @@ scripts to run under the MESSENGER_USER account. This line will be included
 within each MESSENGER VirtualHost container. This will replace the
 [MESSENGERV3PHPHANDLER] line from the csf webserver template files.
 
-Messenger v2 and v3
-===================
+## Messenger v2 and v3
 
 For the service to work, the Messenger User MUST have a specific directory
 structure. This will be created by the script if it does not exist so long as
@@ -926,9 +894,7 @@ As Apache is handling all requests for HTML and HTTPS connections, all
 scripting for the service is provided by the files in /home/csf/public_html/
 which allows the use of PHP and CGI scripts.
 
-
-15. Block Reporting
-###################
+## 15. Block Reporting
 
 lfd can run an external script when it performs and IP address block following
 for example a login failure. This is done by setting the configuration variable
@@ -958,8 +924,7 @@ ARG 2 = port*		# Port, there could be multiple unblocks for each IP
 
 [*] If a port was specified in the initial block.
 
-16. Port Flood Protection
-#########################
+## 16. Port Flood Protection
 
 This option configures iptables to offer protection from DOS attacks against
 specific ports. This option limits the number of connections per time interval
@@ -1010,9 +975,7 @@ to 1000 via modprobe)
 
 *This means that you need to keep the hit count to below 20.
 
-
-17. External Pre- and Post- Scripts
-###################################
+## 17. External Pre- and Post- Scripts
 
 External commands (e.g. iptables rules not covered by csf) can be run before
 and/or after csf sets up the iptables chains and rules.
@@ -1038,7 +1001,6 @@ Then chmod +x /usr/local/csf/bin/csfpre.sh
 Set that file as executable and add an appropriate shebang interpreter line and
 then whatever external commands you wish to execute.
 
-
 Note: The scripts can alternatively be placed in /etc/csf/. If a script is found in
 both locations (/etc/csf/ and /usr/local/csf/bin/) then only the script in
 /usr/local/csf/bin/ will be executed.
@@ -1051,9 +1013,7 @@ Note: While csf runs the script with a preset PATH, you MUST use the full path
 to any binaries that you execute within these scripts to ensure they are run 
 correctly
 
-
-18. lfd Clustering
-##################
+## 18. lfd Clustering
 
 This set of options (CLUSTER*) in csf.conf allows the configuration of an
 lfd cluster environment where a group of servers can share blocks and, via the
@@ -1110,8 +1070,7 @@ reached then that cluster members notification will be lost.
 
 Note: You must restart csf and then lfd after making any CLUSTER_* changes
 
-lfd Cluster CLI and UI
-======================
+## lfd Cluster CLI and UI
 
 See csf --help for the list of new CLI commands. Additional options will
 automatically become available in the UI once CLUSTER_SENDTO has been
@@ -1140,9 +1099,7 @@ overwritten. The intention of the two options is that the --cconfig option be
 used if multiple changes are required and the final request is a --cconfigr to
 restart csf and lfd to effect the requested changes immediately.
 
-
-A Note on lfd Cluster Security
-==============================
+## A Note on lfd Cluster Security
 
 The clustering option is undoubtedly powerful in allowing servers to
 pre-emptively block access attempts as one server is hit before the attack can
@@ -1181,9 +1138,7 @@ THERE ARE NO GUARANTEES OR WARRANTIES PROVIDED THAT THIS FACILITY IS SECURE AND
 ANY DAMAGE ARISING FROM THE EXPLOITATION OF THIS OPTION IS ENTIRELY AT YOUR OWN
 RISK.
 
-
-19. Port Knocking
-#################
+## 19. Port Knocking
 
 This option configures iptables to offer port knocking to open sensitive ports
 based on a sequence of knocked ports for the connecting IP address.
@@ -1227,9 +1182,7 @@ documentation to view IP addresses in the various stages of the knock.
 
 Restarting csf resets the ipt_recent tables and removes all of the knocks.
 
-
-20. Connection Limit Protection
-###############################
+## 20. Connection Limit Protection
 
 This option configures iptables to offer protection from DOS attacks against
 specific ports. It can also be used as a way to simply limit resource usage by
@@ -1263,9 +1216,7 @@ i.e. new connections
 Note: Run /etc/csf/csftest.pl to check whether this option will function on the
 server
 
-
-21. Port/IP address Redirection
-###############################
+## 21. Port/IP address Redirection
 
 This feature uses the file /etc/csf/csf.redirect which is a list of port and/or
 IP address assignments to direct traffic to alternative ports/IP addresses.
@@ -1306,9 +1257,7 @@ Note: /proc/sys/net/ipv4/ip_forward must be set to 1 for DNAT connections to
 work. csf will set this where it can, but if the kernel value cannot be set
 then the DNAT redirection many not work.
 
-
-22. Integrated User Interface Feature
-#####################################
+## 22. Integrated User Interface Feature
 
 Integrated User Interface. This feature provides a HTML UI to the features of
 csf and lfd, without requiring a control panel or web server. The UI runs as a
@@ -1381,9 +1330,7 @@ Required Perl Modules:
     yum install perl-IO-Socket-SSL.noarch perl-Net-SSLeay perl-Net-LibIDN \
                 perl-IO-Socket-INET6 perl-Socket6
 
-
-23. IP Block Lists
-##################
+## 23. IP Block Lists
 
 This feature allows csf/lfd to periodically download lists of IP addresses and
 CIDRs from pubished block or black lists. It is controlled by the file:
@@ -1413,9 +1360,7 @@ If you want to redownload a blocklist you must first delete
 
 Each URL is scanned for an IP/CIDR address per line and if found is blocked.
 
-
-24. Mitigating issues with syslog/rsyslog logs (RESTRICT_SYSLOG)
-##############################################
+## 24. Mitigating issues with syslog/rsyslog logs (RESTRICT_SYSLOG)
 
 Unfortunately, it is trivial for end-users and scripts run by end-users to
 spoof log lines that appear identical to any log line reported in logs
@@ -1479,9 +1424,7 @@ $AddUnixListenSocket /usr/share/cagefs-skeleton/dev/log
 That will prevent end user's access to /dev/log, preventing them from spoofing.
 However, this does also break cron job logging.
 
-
-25. Exim SMTP AUTH Restriction
-##############################
+## 25. Exim SMTP AUTH Restriction
 
 The option SMTPAUTH_RESTRICT will only allow SMTP AUTH to be advertised to the
 IP addresses listed in /etc/csf/csf.smtpauth plus the localhost IP addresses.
@@ -1504,9 +1447,7 @@ listed in CC_ALLOW_SMTPAUTH
 To make this option work you MUST make the following modifications to your
 exim.conf:
 
-
-On cPanel servers you can do this by:
-=====================================
+## On cPanel servers you can do this by:
 
 1. Navigate to WHM > Exim Configuration Manager > Advanced Editor
 
@@ -1525,7 +1466,7 @@ ${if match_ip{$sender_host_address}{iplsearch;/etc/exim.smtpauth}{*}{}}
 
 7. That should be all that is required after having made any necessary changes
    within csf.conf and restarting csf and then lfd
-   
+
 8. Be sure to test extensively to ensure the option works as expected
 
 To reverse this change:
@@ -1542,9 +1483,7 @@ To reverse this change:
 5. Disable SMTPAUTH_RESTRICT and CC_ALLOW_SMTPAUTH in csf.conf and then restart
    csf and then lfd
 
-
-Alternatively, on cPanel:
-=========================
+## Alternatively, on cPanel:
 
 1. Edit /etc/exim.conf.local and add the following line to an @CONFIG@ section
    all on one line:
@@ -1558,9 +1497,7 @@ service exim restart
 
 3. Be sure to test extensively to ensure the option works as expected
 
-
-On non-cPanel platforms:
-========================
+## On non-cPanel platforms:
 
 1. Modify your active exim.conf and add the following as a single line near the
    top all on one line:
@@ -1571,9 +1508,7 @@ auth_advertise_hosts = ${if match_ip{$sender_host_address}{iplsearch;/etc/exim.s
 
 3. Be sure to test extensively to ensure the option works as expected
 
-
-26. UI Skinning and Mobile View
-###############################
+## 26. UI Skinning and Mobile View
 
 The csf UI provided through cPanel, DirectAdmin, Webmin and the integrated UI
 via lfd, all user the Bootstrap and jQuery frameworks. Additional styling is
@@ -1623,9 +1558,7 @@ Note: We do NOT recommend reformatting the UI output as any changes in the core
 code may not be reflected in the user experience and can break the product.
 Only style changes should be made.
 
-
-27. CloudFlare
-##############
+## 27. CloudFlare
 
 This features provides interaction with the CloudFlare Firewall.
 
@@ -1691,9 +1624,7 @@ have a CloudFlare rule added regardless of domain.
 NOTE: You should always list the CloudFlare IP addresses in /etc/csf/csf.ignore
 to prevent them from being blocked by lfd from https://www.cloudflare.com/ips/
 
-
-CLI commands
-============
+## CLI commands
 
 There are also accompanying csf CLI commands available (see man) to interact
 with the Cloudflare firewall.
@@ -1704,12 +1635,12 @@ section that mirror the CLI commands.
 1. Using the CLI commands all, block, challenge or whitelist rules in the
 provided users CloudFlare firewall can be listed, e.g.:
 
-csf --cloudflare list all [user1,user2,...]
+    csf --cloudflare list all [user1,user2,...]
 
 2. Block, challenge and whitelist rules can be added for IPs to the provided
 users CloudFlare firewall, e.g.:
 
-csf --cloudflare add challenge 11.22.33.44 [user1,user2,...]
+    csf --cloudflare add challenge 11.22.33.44 [user1,user2,...]
 
 Note: These rules are NOT cleared by lfd and do NOT create an equivalent
 iptables rule in csf)
@@ -1717,18 +1648,18 @@ iptables rule in csf)
 3. Rules can be deleted for IPs to the provided users CloudFlare firewall,
 e.g.:
 
-csf --cloudflare del 11.22.33.44 [domain,domain2,...]
+    csf --cloudflare del 11.22.33.44 [domain,domain2,...]
 
 Note: These rules are NOT cleared in csf if they exist
 
 4. Domains can also be used instead of users, or a mixture of both e.g.:
 
-csf --cloudflare list all [user,user2,domain,...]
+    csf --cloudflare list all [user,user2,domain,...]
 
 5. IPs can be added both the users CloudFlare firewall and to csf as temporary
 allow or deny, e.g.:
 
-csf --cloudflare tempadd deny 11.22.33.44 [user1,user2,...]
+    csf --cloudflare tempadd deny 11.22.33.44 [user1,user2,...]
 
 Note: This applies the allow/deny for the IP address in csf for CF_TEMP seconds
 as well as the users CloudFlare Firewall. Once the temporary entry expires lfd
@@ -1750,11 +1681,9 @@ Only Enterprise customers can "block" a Country Code, but all can "allow" and
 using "tempadd" use the normal csf temp CLI commands. This will remove the
 rules from both iptables and the users CloudFlare firewall, e.g.:
 
-csf --tr 44.33.22.11
+    csf --tr 44.33.22.11
 
-
-28. InterWorx
-#############
+## 28. InterWorx
 
 InterWorx integration is available for csf. The installation makes changes to
 the underlying InterWorx installation due to its current dependence on APF. To
@@ -1775,7 +1704,7 @@ page stating that csf should be used instead. lfd will replace the page upon
 restart incase of upgrades to InterWorx. If you want to disable this behaviour,
 create an empty file as follows:
 
-touch /etc/cxs/interworx.firewall
+    touch /etc/cxs/interworx.firewall
 
 The InterWorx plugin for csf is auto-enabled. Enabling or Disabling the
 InterWorx plugin has no effect on csf itself, only the UI plugin presence.
@@ -1785,9 +1714,7 @@ configuration settings in /etc/csf/csf.conf or via the UI and set LF_ALERT_TO
 to a suitable email address. After making any changes, restart csf and then
 lfd.
 
-
-28. CentOS Web Panel (CWP)
-##########################
+## 28. CentOS Web Panel (CWP)
 
 CWP integration is available for csf. Since CWP already has some custom
 modifications, these have been taken into account. To access the now inbuilt UI
@@ -1802,7 +1729,4 @@ will be ignored while this is in place.
 If you want to use the now inbuilt detection you must edit
 /etc/csf/regex.custom.pm and remove the 3 lines that comprise the custom entry
 and then restart lfd.
-
-
-
 
