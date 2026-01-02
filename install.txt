@@ -22,11 +22,11 @@ Installation
 ============
 Installation is quite straightforward:
 
-cd /usr/src
-rm -fv csf.tgz
-wget https://download.configserver.com/csf.tgz
-tar -xzf csf.tgz
-cd csf
+cd /usr/local/src
+rm -fv csf.tar.gz
+wget https://github.com/serverok/csf-firewall/archive/refs/tags/v15.00.tar.gz -O csf.tar.gz
+tar -xzf csf.tar.gz
+cd csf-firewall-15.00
 sh install.sh
 
 Next, test whether you have the required iptables modules:
