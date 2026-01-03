@@ -156,3 +156,15 @@ exe:/usr/local/cpanel/3rdparty/wp-toolkit/bin/wpt-panopticon
 #pexe:/opt/cpanel/ea-php\d+/root/usr/bin/php
 #pexe:/opt/cpanel/ea-php\d+/root/usr/bin/php.cagefs
 #pexe:/opt/cpanel/ea-php\d+/root/usr/sbin/php-fpm
+#exe:/usr/bin/dbus-broker
+#exe:/usr/local/bin/redis-server
+#exe:/usr/bin/redis-server
+#exe:/usr/local/cpanel/3rdparty/webalizer/bin/french
+#exe:/usr/local/cpanel/3rdparty/webalizer/bin/english
+#exe:/usr/sbin/imunify360-webshield
+#exe:/var/ossec/bin/ossec-monitord
+#exe:/var/ossec/bin/ossec-analysisd
+#exe:/var/ossec/bin/ossec-remoted
+#pexe:/usr/local/lsws/bin/lshttpd.*
+#exe:/usr/bin/memcached
+#exe:/usr/libexec/dovecot/managesieve-login
